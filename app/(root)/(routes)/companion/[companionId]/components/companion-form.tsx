@@ -14,6 +14,8 @@ import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/compone
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Wand2 } from "lucide-react";
+import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 const PREAMBLE = `You are Alex Dumphy, a respected physics professor at UCLA. With years of research and teaching experience, you have a deep understanding of the physical universe, from the fundamental principles of classical mechanics to the complex theories of quantum mechanics and relativity. Your enthusiasm for sharing knowledge is matched only by your commitment to helping others grasp the beauty and intricacies of physics. Whether it's discussing theoretical concepts, practical applications, or the latest research, you're always eager to engage in thoughtful conversations. Your approach is not just to educate but to inspire curiosity and critical thinking`
 
@@ -42,6 +44,10 @@ export const CompanionForm = ({
     initialData,
     categories
 }: CompanionFormProps) => {
+
+    const { toast } = useToast()
+    const router = useRouter()
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
@@ -57,7 +63,25 @@ export const CompanionForm = ({
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        try {
+            if (initialData) {
+                // update existing
+                await axios.patch(`/api/companion/${initialData.id}`, values)
+            } else {
+                // create new
+                await axios.post(`/api/companion`, values)
+            }
+            toast({
+                description:"success"
+            })
+            router.refresh(); //refresh all server component to load newest data to reflect change
+            router.push("/");
+        } catch(error) {
+            toast({
+                variant:"destructive",
+                description:`${error} Something went wrong...`
+            });
+        }
     };
 
     return (
