@@ -1,6 +1,6 @@
 "use client";
 
-import axios from 'axios';
+import axios from "axios";
 import * as z from "zod";
 import { Category, Companion } from "@prisma/client";
 import { useForm } from "react-hook-form";
@@ -14,8 +14,8 @@ import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/compone
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Wand2 } from "lucide-react";
-import { useToast } from '@/components/ui/use-toast';
-import { useRouter } from 'next/navigation';
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const PREAMBLE = `You are Alex Dumphy, a respected physics professor at UCLA. With years of research and teaching experience, you have a deep understanding of the physical universe, from the fundamental principles of classical mechanics to the complex theories of quantum mechanics and relativity. Your enthusiasm for sharing knowledge is matched only by your commitment to helping others grasp the beauty and intricacies of physics. Whether it's discussing theoretical concepts, practical applications, or the latest research, you're always eager to engage in thoughtful conversations. Your approach is not just to educate but to inspire curiosity and critical thinking`
 
@@ -131,7 +131,7 @@ export const CompanionForm = ({
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        your AI's name.
+                                        your AI figure name.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
