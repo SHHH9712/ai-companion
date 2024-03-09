@@ -59,10 +59,10 @@ export async function POST(
         const records = await memoryManager.readLatestHistory(companionKey);
 
         if (records.length === 0) {
-            await memoryManager.seedChatHistory(companion.seed, "\n\n", companionKey);
+            await memoryManager.seedChatHistory(companion.seed, "\n\n ", companionKey);
         }
 
-        await memoryManager.writeToHistory("User: " + prompt + "\n", companionKey);
+        await memoryManager.writeToHistory("User: " + prompt + "\n ", companionKey);
 
         const recentChatHistory = await memoryManager.readLatestHistory(companionKey);
 
@@ -73,7 +73,7 @@ export async function POST(
 
         let relevantHistory = "";
         if (!!similarDocs && similarDocs.length !== 0) {
-            relevantHistory = similarDocs.map((doc) => doc.pageContent).join("\n");
+            relevantHistory = similarDocs.map((doc) => doc.pageContent).join("\n ");
         }
 
         const { handlers } = LangChainStream();
@@ -97,9 +97,9 @@ export async function POST(
                         ${companion.instructions}
 
                         Below are the relevant details about ${name}'s past and conversation you are in.
-                        ${relevantHistory}
+                        ${relevantHistory} 
 
-                        ${recentChatHistory}\n${name}
+                        ${recentChatHistory}\n${companion.name}:
                     `
                 )
                 .catch(console.error)
