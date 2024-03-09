@@ -35,8 +35,8 @@ export const ChatHeader = ({
             toast({
                 description: "Deletion success"
             })
-            router.refresh()
             router.push("/")
+            router.refresh()
         } catch(error) {
             toast({
                 description: `Something went wrong ${error}`,

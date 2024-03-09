@@ -59,10 +59,10 @@ export async function POST(
         const records = await memoryManager.readLatestHistory(companionKey);
 
         if (records.length === 0) {
-            await memoryManager.seedChatHistory(companion.seed, "\n\n ", companionKey);
+            await memoryManager.seedChatHistory(companion.seed, "\n", companionKey);
         }
 
-        await memoryManager.writeToHistory("User: " + prompt + "\n ", companionKey);
+        await memoryManager.writeToHistory("User:" + prompt + "\n", companionKey);
 
         const recentChatHistory = await memoryManager.readLatestHistory(companionKey);
 
@@ -73,7 +73,7 @@ export async function POST(
 
         let relevantHistory = "";
         if (!!similarDocs && similarDocs.length !== 0) {
-            relevantHistory = similarDocs.map((doc) => doc.pageContent).join("\n ");
+            relevantHistory = similarDocs.map((doc) => doc.pageContent).join("\n");
         }
 
         const { handlers } = LangChainStream();
@@ -91,16 +91,16 @@ export async function POST(
         const resp = String(
             await model
                 .invoke(
-                    `
-                        ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${name}: prefix.
-                    
-                        ${companion.instructions}
+`
+ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix.
 
-                        Below are the relevant details about ${name}'s past and conversation you are in.
-                        ${relevantHistory} 
+${companion.instructions}
 
-                        ${recentChatHistory}\n${companion.name}:
-                    `
+Below are the relevant details about ${name}'s past and conversation you are in.
+${relevantHistory} 
+
+${recentChatHistory}\n${companion.name}:
+`
                 )
                 .catch(console.error)
         )
@@ -108,6 +108,8 @@ export async function POST(
         const cleaned = resp.replaceAll(",", "");
         const chunks = cleaned.split("\n");
         const response = chunks[0]
+
+        console.log("Model response: ", cleaned)
 
         await memoryManager.writeToHistory("" + response.trim(), companionKey);
         var Readable = require("stream").Readable;
