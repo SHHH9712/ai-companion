@@ -38,7 +38,7 @@ export async function POST(req: Request) {
             data: {
                 userId: session?.metadata?.userId,
                 stripeSubscriptionId: subscription.id,
-                stripCustomerId: subscription.customer as string,
+                stripeCustomerId: subscription.customer as string,
                 stripePriceId: subscription.items.data[0].price.id,
                 stripeCurrentPeriodEnd: new Date(
                     subscription.current_period_end * 1000

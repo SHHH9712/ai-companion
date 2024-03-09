@@ -22,13 +22,14 @@ export async function GET() {
             }
         })
 
-        if (userSubscription && userSubscription.stripCustomerId) {
+        if (userSubscription && userSubscription.stripeCustomerId) {
             const stripeSession = await stripe.billingPortal.sessions.create({
-                customer: userSubscription.stripCustomerId,
+                customer: userSubscription.stripeCustomerId,
                 return_url: settingsUrl,
             });
+            console.log(stripeSession)
 
-            return new NextResponse(JSON.stringify({ url: stripeSession.url }), { status: 500 })
+            return new NextResponse(JSON.stringify({ url: stripeSession.url }))
         }
 
         const stripeSession = await stripe.checkout.sessions.create({
